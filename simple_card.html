@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluedo Detective Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            font-size: 14px;
+        }
+
+        .detective-sheet {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .players-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .players-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .player-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .player-input {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #333;
+            background: white;
+            color: #333;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+            background: #333;
+            color: white;
+            padding: 4px;
+        }
+
+        .grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .grid-table th,
+        .grid-table td {
+            border: 1px solid #333;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .grid-table th {
+            background: #f0f0f0;
+            font-weight: 600;
+            height: 25px;
+        }
+
+        .grid-table td {
+            background: white;
+            height: 25px;
+            width: 35px;
+        }
+
+        .item-name {
+            text-align: left !important;
+            font-weight: 600;
+            padding-left: 8px !important;
+            width: 100px !important;
+            background: #f9f9f9 !important;
+        }
+
+        .cell {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 20px;
+            font-weight: 600;
+        }
+
+        .cell:hover {
+            background-color: #e8e8e8 !important;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .control-btn {
+            background: #333;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            margin: 0 3px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+        }
+
+        .control-btn:hover {
+            background: #555;
+        }
+
+        .control-btn.active {
+            background: #0066cc;
+        }
+
+        .footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="detective-sheet">
+        <div class="header">
+            <h1 style="margin: 0; font-size: 20px;">DETECTIVE SHEET</h1>
+        </div>
+
+        <div class="players-row">
+            <div class="players-text">PLAYERS</div>
+            <div class="player-inputs">
+                <input type="text" class="player-input" id="player1" maxlength="2">
+                <input type="text" class="player-input" id="player2" maxlength="2">
+                <input type="text" class="player-input" id="player3" maxlength="2">
+                <input type="text" class="player-input" id="player4" maxlength="2">
+                <input type="text" class="player-input" id="player5" maxlength="2">
+                <input type="text" class="player-input" id="player6" maxlength="2">
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn active" onclick="setMode('check')">✓</button>
+            <button class="control-btn" onclick="setMode('cross')">✗</button>
+            <button class="control-btn" onclick="setMode('clear')">Clear</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">WHO?</div>
+            <table class="grid-table">
+                <thead>
+                    <tr>
+                        <th class="item-name"></th>
+                        <th class="player-header" data-player="1"></th>
+                        <th class="player-header" data-player="2"></th>
+                        <th class="player-header" data-player="3"></th>
+                        <th class="player-header" data-player="4"></th>
+                        <th class="player-header" data-player="5"></th>
+                        <th class="player-header" data-player="6"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-name">Green</td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="green" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Mustard</td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="mustard" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Orchid</td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="orchid" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Peacock</td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="peacock" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Plum</td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="plum" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Scarlett</td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="scarlett" data-col="6"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-title">WHAT?</div>
+            <table class="grid-table">
+                <thead>
+                    <tr>
+                        <th class="item-name"></th>
+                        <th class="player-header" data-player="1"></th>
+                        <th class="player-header" data-player="2"></th>
+                        <th class="player-header" data-player="3"></th>
+                        <th class="player-header" data-player="4"></th>
+                        <th class="player-header" data-player="5"></th>
+                        <th class="player-header" data-player="6"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-name">Candlestick</td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="candlestick" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Dagger</td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dagger" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Lead Pipe</td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="leadpipe" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Revolver</td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="revolver" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Rope</td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="rope" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Wrench</td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="wrench" data-col="6"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-title">WHERE?</div>
+            <table class="grid-table">
+                <thead>
+                    <tr>
+                        <th class="item-name"></th>
+                        <th class="player-header" data-player="1"></th>
+                        <th class="player-header" data-player="2"></th>
+                        <th class="player-header" data-player="3"></th>
+                        <th class="player-header" data-player="4"></th>
+                        <th class="player-header" data-player="5"></th>
+                        <th class="player-header" data-player="6"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-name">Ballroom</td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="ballroom" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Billiard Room</td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="billiard" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Conservatory</td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="conservatory" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Dining Room</td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="dining" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Hall</td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="hall" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Kitchen</td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="kitchen" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Library</td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="library" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Lounge</td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="lounge" data-col="6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-name">Study</td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="1"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="2"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="3"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="4"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="5"></div>
+                        </td>
+                        <td>
+                            <div class="cell" data-row="study" data-col="6"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Digital Cluedo Detective Sheet</p>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'check';
+
+        // Update headers when player inputs change
+        for (let i = 1; i <= 6; i++) {
+            const input = document.getElementById(`player${i}`);
+            const headers = document.querySelectorAll(`th[data-player="${i}"]`);
+
+            input.addEventListener('input', function () {
+                headers.forEach(header => {
+                    header.textContent = this.value.toUpperCase();
+                });
+            });
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Add click event listeners to all cells
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', function () {
+                switch (currentMode) {
+                    case 'check':
+                        this.textContent = this.textContent === '✓' ? '' : '✓';
+                        break;
+                    case 'cross':
+                        this.textContent = this.textContent === '✗' ? '' : '✗';
+                        break;
+                    case 'clear':
+                        this.textContent = '';
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
